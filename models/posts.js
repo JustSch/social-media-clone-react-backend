@@ -4,6 +4,9 @@ const PostSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
+    locked :{
+        type: Boolean
+    },
     date:{
         type : Date,
         default : Date.now
