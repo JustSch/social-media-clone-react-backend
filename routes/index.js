@@ -11,12 +11,12 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
         name: req.user.name
     }));
 
-router.get('/:username/', ensureAuthenticated, (req, res) => 
+router.get('/:username/',(req, res) => 
     res.render('dashboard' , {
         name: req.user.name
     }));
 
-router.get('/:username/posts/:postID', ensureAuthenticated, (req, res) => 
+router.get('/:username/post/:postID',(req, res) => 
     res.render('dashboard' , {
         name: req.user.name
     }));
