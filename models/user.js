@@ -5,7 +5,8 @@ const UserSchema = new mongoose.Schema({
         required : true
     },
     locked: {
-        type: Boolean
+        type: Boolean,
+        default : false
     },
     email :{
         type : String,

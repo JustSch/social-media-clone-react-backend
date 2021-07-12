@@ -3,10 +3,7 @@ const PostSchema = new mongoose.Schema({
     userID:{
         type : Number,
         required : true
-    },
-    locked :{
-        type: Boolean
-    },
+    }, 
     date:{
         type : Date,
         default : Date.now
@@ -17,10 +14,6 @@ const PostSchema = new mongoose.Schema({
     },
     replies: {
         type: []
-    },
-    uri: {
-        type: String,
-        required: true
     }
 
 })
