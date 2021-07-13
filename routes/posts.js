@@ -8,17 +8,16 @@ router.post('/createPost',ensureAuthenticated,(req,res) => {
 
     const message = req.body;
 
-    if (message == '' || message == none){
+    if (message == ''){
         res.render('Error ');
         return;
     }
-
-    const newPost = new Post({
-        none,
-        message
-    });
-    newPost.id = req.user.id;
-    newPost.save().catch(err => console.log(err));
+    const newPost = new Post;
+    newPost.userID = req.user.id;
+    newPost.content = message.message;
+    newPost.save().then(user => {
+        res.redirect('/PostCreator');
+    }).catch(err => console.log(err));
 });
 
 module.exports = router;

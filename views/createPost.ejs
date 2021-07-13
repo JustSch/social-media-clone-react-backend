@@ -1,0 +1,26 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3">
+            <i class="fas fa-plus-square"></i> Create Your post
+        </h1>
+        <%#- include ("./partials/messages"); %>
+        <form action="/posts/createPost" method="POST" autocomplete="off">
+          <div class="form-group">
+            <label for="message">Create Your Post</label>
+            <input
+              type="message"
+              id="message"
+              name="message"
+              class="form-control"
+              placeholder="Write Your Post Here"
+              value="<%= typeof message != 'undefined' ? message : '' %>"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
