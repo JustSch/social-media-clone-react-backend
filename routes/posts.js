@@ -5,19 +5,29 @@ const { ensureAuthenticated } = require('../config/auth');
 
 router.post('/createPost',ensureAuthenticated,(req,res) => {
   
-
+    let errors = []
     const message = req.body;
 
-    if (message == ''){
-        res.render('Error ');
-        return;
+    if (message.message == ''){
+        errors.push({ msg: 'Please enter all fields' });
+
+        if (errors.length > 0){
+            res.render('createPost',{
+                errors
+            });
+        }
     }
-    const newPost = new Post;
-    newPost.userID = req.user.id;
-    newPost.content = message.message;
-    newPost.save().then(user => {
+
+    else {
+        const newPost = new Post;
+        newPost.userID = req.user.id;
+        newPost.content = message.message;
+        newPost.save().then(user => {
+        req.flash('success_msg', 'Post Submitted Successfully');
         res.redirect('/PostCreator');
-    }).catch(err => console.log(err));
+            }).catch(err => console.log(err));
+    }
+    
 });
 
 module.exports = router;
