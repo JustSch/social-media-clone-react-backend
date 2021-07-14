@@ -7,7 +7,7 @@
       <%- include ("./partials/messages"); %>
       <form action="/users/register" method="POST">
         <div class="form-group">
-          <label for="name">Name</label>
+          <label for="name" class="form-label mt-4">Name</label>
           <input
             type="name"
             id="name"
@@ -18,7 +18,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email" class="form-label mt-4">Email</label>
           <input
             type="email"
             id="email"
@@ -29,7 +29,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password" class="form-label mt-4">Password</label>
           <input
             type="password"
             id="password"
@@ -40,7 +40,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="password2">Confirm Password</label>
+          <label for="password2" class="form-label mt-4">Confirm Password</label>
           <input
             type="password"
             id="password2"
@@ -50,9 +50,9 @@
             value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
           />
         </div>
-        <button type="submit" class="btn btn-primary btn-block">
-          Register
-        </button>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-large btn-primary mt-4">Register</button>
+        </div>
       </form>
       <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
     </div>
