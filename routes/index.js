@@ -11,21 +11,16 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
         name: req.user.name
     }));
 
-router.get('/PostCreator', ensureAuthenticated, (req,res)=>{
-        res.render('createPost')
-    });
+router.get('/PostCreator', ensureAuthenticated, (req, res)=>
+        res.render('createPost'));
 
-router.get('/:username/',(req, res) => 
+router.get('/:username/', (req, res) => 
     //check if valid username or give error page
-    res.render('dashboard' , {
-        name: req.user.name
-    }));
+    res.send('username: '+ req.params.username));
 
 router.get('/:username/post/:postID',(req, res) => 
     //check if valid username and valid post id
-    res.render('dashboard' , {
-        name: req.user.name
-    }));
+    res.send('username: ' + req.params.username + ' postID: ' + req.params.postID));
 
 
 module.exports = router;
