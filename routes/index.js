@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const { ensureAuthenticatedHome } = require('../config/authhome');
+const Post = require('../models/posts');
+const User = require('../models/user');
 
 router.get('/',ensureAuthenticatedHome, (req, res) =>
     res.redirect('/dashboard'));
@@ -15,9 +17,20 @@ router.get('/PostCreator', ensureAuthenticated, (req, res)=>
         res.render('createPost'));
 
 //API Routes
-router.get('/api/:username/posts', (req, res) => 
+router.get('/api/:username/posts', function(req, res) {
     //check if valid username then generate json array with all posts
-    res.send('username: '+ req.params.username));
+    
+    User.findOne({name: req.params.username},function (err, users) {
+        if (err) return console.error(err);
+    
+        Post.find({userID: users._id}, function (err2, posts) {
+            if (err2) return console.error(err2);
+            res.json(posts);
+        });
+
+    });
+    
+});
 
 router.get('/api/:username/post/:postID',(req, res) => 
     //check if valid username generate json array for a single post
