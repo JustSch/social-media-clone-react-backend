@@ -18,18 +18,20 @@ router.get('/PostCreator', ensureAuthenticated, (req, res)=>
 
 //API Routes
 router.get('/api/:username/posts', function(req, res) {
-    //check if valid username then generate json array with all posts
     
     User.findOne({name: req.params.username},function (err, users) {
         if (err) return console.error(err);
-    
-        Post.find({userID: users._id}, function (err2, posts) {
-            if (err2) return console.error(err2);
-            res.json(posts);
-        });
 
-    });
-    
+        if(users){
+            Post.find({userID: users._id}, function (err2, posts) {
+                if (err2) return console.error(err2);
+                res.json(posts);
+            });
+        }
+        else{
+            res.sendStatus(500);
+        }
+    });   
 });
 
 router.get('/api/:username/post/:postID',(req, res) => 
