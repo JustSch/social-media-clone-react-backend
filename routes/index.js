@@ -26,7 +26,7 @@ router.get('/api/:username/posts', function(req, res) {
             Post.find({userID: users._id}, function (err2, posts) {
                 if (err2) return console.error(err2);
                 res.json(posts);
-            });
+            }).sort('-date');
         }
         else{
             res.sendStatus(500);
