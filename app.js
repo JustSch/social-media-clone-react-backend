@@ -6,6 +6,7 @@ const expressEjsLayout = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const db = require('./config/keys').MongoURI;
 
@@ -42,10 +43,11 @@ app.use(function(req, res, next) {
     next();
   });
 
+app.use(mongoSanitize());
+
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 app.use('/posts',require('./routes/posts'));
-
 
 app.use(express.static(__dirname + '/public'));
 const PORT = process.env.PORT || 5000;

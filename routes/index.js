@@ -18,7 +18,6 @@ router.get('/PostCreator', ensureAuthenticated, (req, res)=>
 
 //API Routes
 router.get('/api/:username/posts', function(req, res) {
-    
     User.findOne({name: req.params.username},function (err, users) {
         if (err) return console.error(err);
 
