@@ -1,32 +1,41 @@
 window.onload = function () {
   //preLoad();
-    createPostsDashboard();
+  createPostsDashboard();
 };
 
 function preLoad() {
-  var elements = document.getElementById("posts");
   createPostsDashboard();
 }
 
 function createPostsDashboard() {
+  var elements = document.getElementById("posts");
+  console.log(elements);
   const Http = new XMLHttpRequest();
-  const url = "http://localhost:5000/api/tester2/posts";
-  
+  const url = "http://localhost:5000/api/tester1/posts";
+
   var post;
-  
-  Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200){
-        post = Http.responseText;
-        if(!post){
-            console.log('no posts');
-        }
-        else{
-            console.log(post);
-        }
-        
+
+  Http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const posts = JSON.parse(Http.responseText);
+      if (!posts) {
+        console.log("no posts");
+      } else {
+        console.log(posts);
+
+
+        const markup = posts.map(({content, userID}) => {
+            return `<ul>
+                <li>name: ${userID}</li>
+                <li>content: ${content}</li>
+            </ul>`
+        }).join('');
+       
+
+        elements.innerHTML = markup;
       }
-  }
+    }
+  };
   Http.open("GET", url);
   Http.send();
-  
 }
