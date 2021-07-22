@@ -21,7 +21,7 @@ function createPostsDashboard() {
             console.log('no posts');
         }
         else{
-            console.log(Http.responseText);
+            console.log(post);
         }
         
       }
