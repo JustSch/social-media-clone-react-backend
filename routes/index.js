@@ -40,7 +40,7 @@ router.get('/api/:username/post/:postID',(req, res) =>
 //Profile Routes
 router.get('/:username/', (req, res) => 
     //check if valid username or give error page
-    res.send('username: '+ req.params.username));
+    res.render('profile'));
 
 router.get('/:username/post/:postID',(req, res) => 
     //check if valid username and valid post id
