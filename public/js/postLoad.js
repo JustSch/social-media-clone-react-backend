@@ -1,11 +1,6 @@
 window.onload = function () {
-  //preLoad();
   createPostsDashboard();
 };
-
-function preLoad() {
-  createPostsDashboard();
-}
 
 function createPostsDashboard() {
   var elements = document.getElementById("posts");
