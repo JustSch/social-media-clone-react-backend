@@ -20,9 +20,11 @@ function createPostsDashboard() {
   Http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const posts = JSON.parse(Http.responseText);
+
       if (!posts || posts.length == 0) {     
         let error_message = "This User Does Not Have Any Posts!";
         posts_div.innerHTML = error_markup(error_message);
+        
       } else {
         const markup = posts.map(({content, name, date}) => {
           return `<div class="mb-3">
@@ -44,7 +46,7 @@ function createPostsDashboard() {
     if (this.readyState == 4 && this.status == 500) {
       let error_message = "This User Does Not Exist!";
       posts_div.innerHTML = error_markup(error_message);
-          }
+    }
   };
   Http.open("GET", url);
   Http.send();
