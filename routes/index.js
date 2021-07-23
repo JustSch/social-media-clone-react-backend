@@ -24,7 +24,10 @@ router.get('/api/:username/posts', function(req, res) {
         if(users){
             Post.find({userID: users._id}, function (err2, posts) {
                 if (err2) return console.error(err2);
-                res.json(posts);
+                const result = posts.map(({content, date}) => {
+                    return {name: users.name, content: content, date: date};
+                });
+                res.json(result);
             }).sort('-date');
         }
         else{

@@ -23,15 +23,13 @@ function createPostsDashboard() {
       } else {
         console.log(posts);
 
-
-        const markup = posts.map(({content, userID}) => {
+        const markup = posts.map(({content, name}) => {
             return `<ul>
-                <li>name: ${userID}</li>
+                <li>name: ${name}</li>
                 <li>content: ${content}</li>
             </ul>`
         }).join('');
        
-
         elements.innerHTML = markup;
       }
     }
