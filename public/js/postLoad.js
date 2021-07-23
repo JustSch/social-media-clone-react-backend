@@ -14,9 +14,7 @@ function createPostsDashboard() {
       </div>`};
 
   const Http = new XMLHttpRequest();
-  const uri = window.location.pathname;
-  const url = `http://localhost:5000/api${uri}/posts`;
-  
+  const url = `${window.location.protocol}//${window.location.host}/api${window.location.pathname}/posts`;
   Http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const posts = JSON.parse(Http.responseText);
