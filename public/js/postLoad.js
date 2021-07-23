@@ -20,8 +20,7 @@ function createPostsDashboard() {
   Http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const posts = JSON.parse(Http.responseText);
-      if (!posts || posts.length == 0) {
-      
+      if (!posts || posts.length == 0) {     
         let error_message = "This User Does Not Have Any Posts!";
         posts_div.innerHTML = error_markup(error_message);
       } else {
