@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {ensureAuthenticated} = require("../config/auth");
 const {ensureAuthenticatedHome} = require("../config/authhome");
+const {ensureAuthenticatedProfile} = require("../config/authprofile");
 const Post = require("../models/posts");
 const User = require("../models/user");
 
@@ -36,8 +37,7 @@ router.get("/api/:username/posts", function (req, res) {
   });
 });
 
-
-router.get("/api/:username", function (req, res) {
+router.get("/api/:username", ensureAuthenticatedProfile, function (req, res) {
   User.findOne({
     name: req.params.username
   }, function (err, users) {
@@ -51,6 +51,22 @@ router.get("/api/:username", function (req, res) {
       res.json(result(users));
     } else {
       res.sendStatus(500);
+    }
+  });
+});
+
+router.get("/api/isFollowing/:username", ensureAuthenticatedProfile, function (req, res) {
+  User.findOne({
+    name: req.params.username
+  }, function (err, users) {
+    if (err) 
+      return console.error(err);
+    if (users) {
+      if (req.user.following.includes(req.params.userID)) {
+        res.json({isFollowing: true});
+      } else {
+        res.json({isFollowing: false});
+      }
     }
   });
 });
