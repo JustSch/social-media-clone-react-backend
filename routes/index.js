@@ -55,20 +55,26 @@ router.get("/api/:username", ensureAuthenticatedProfile, function (req, res) {
   });
 });
 
-router.get("/api/isFollowing/:username", ensureAuthenticatedProfile, function (req, res) {
-  User.findOne({
-    name: req.params.username
-  }, function (err, users) {
-    if (err) 
-      return console.error(err);
-    if (users) {
-      if (req.user.following.includes(req.params.userID)) {
-        res.json({isFollowing: true});
-      } else {
-        res.json({isFollowing: false});
+router.get("/api/isFollowing/:username", function (req, res) {
+  if (req.user){
+    User.findOne({
+      name: req.params.username
+    }, function (err, users) {
+      if (err) 
+        return console.error(err);
+      if (users) {
+        if (req.user.following.includes(req.params.userID)) {
+          res.json({isFollowing: true});
+        } else {
+          res.json({isFollowing: false});
+        }
       }
-    }
-  });
+    });
+  }
+  else {
+    res.json({});
+  }
+  
 });
 
 //Profile Routes
