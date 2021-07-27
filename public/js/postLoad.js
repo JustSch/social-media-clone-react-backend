@@ -1,4 +1,5 @@
 window.onload = function () {
+  createProfileHeader();
   createPostsDashboard();
 };
 
@@ -48,4 +49,31 @@ function createPostsDashboard() {
   };
   Http.open("GET", url);
   Http.send();
+}
+
+function createProfileHeader(){
+  var header_div = document.getElementById("profile_header");
+  const Http = new XMLHttpRequest();
+  const url = `${window.location.protocol}//${window.location.host}/api${window.location.pathname}`;
+  Http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const user = JSON.parse(Http.responseText);
+
+      if (!user || user.length == 0) {     
+        header_div.innerHTML = `<h1>Error Displaying ${window.location.pathname.split('/')[1]}'s Profile</h1>`;
+        
+      } else {
+        
+        header_div.innerHTML = `<h1>${user.name}'s Profile</h1>`;
+      }
+    }
+
+    if (this.readyState == 4 && this.status == 500) {
+      header_div.innerHTML = `<h1>${window.location.pathname.split('/')[1]}'s Profile Does Not Exist</h1>`;
+    }
+  };
+  Http.open("GET", url);
+  Http.send();
+
+
 }
