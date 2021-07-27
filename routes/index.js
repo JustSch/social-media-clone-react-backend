@@ -56,7 +56,7 @@ router.get("/api/:username", ensureAuthenticatedProfile, function (req, res) {
 });
 
 router.get("/api/isFollowing/:username", function (req, res) {
-  if (req.user){
+  if (req.user) {
     User.findOne({
       name: req.params.username
     }, function (err, users) {
@@ -70,11 +70,16 @@ router.get("/api/isFollowing/:username", function (req, res) {
         }
       }
     });
-  }
-  else {
+  } else {
     res.json({});
   }
-  
+});
+router.get("/api/user/isAuthenticated", function (req, res) {
+  if (req.user) {
+    res.json({isAuthenticated: true});
+  } else {
+    res.json({isAuthenticated: false});
+  }
 });
 
 //Profile Routes
