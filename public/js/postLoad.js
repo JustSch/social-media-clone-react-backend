@@ -1,18 +1,20 @@
 window.onload = function () {
-  createProfileHeader();
-  createPostsDashboard();
-};
-
-function createPostsDashboard() {
-  var posts_div = document.getElementById("posts");
-  const error_markup = (error_message) => {
+  const error_markup = error_message => {
     return `<div class="row mt-5">
         <div class="col-md-6 m-auto">
           <div class="card card-body">
           <h1 class="text-center mb-3">${error_message}</h1>
           </div>
         </div>
-      </div>`};
+      </div>`;
+  };
+
+  createProfileHeader(error_markup);
+  createPostsDashboard(error_markup);
+};
+
+function createPostsDashboard(error_markup) {
+  var posts_div = document.getElementById("posts");
 
   const Http = new XMLHttpRequest();
   const url = `${window.location.protocol}//${window.location.host}/api${window.location.pathname}/posts`;
@@ -20,10 +22,9 @@ function createPostsDashboard() {
     if (this.readyState == 4 && this.status == 200) {
       const posts = JSON.parse(Http.responseText);
 
-      if (!posts || posts.length == 0) {     
+      if (!posts || posts.length == 0) {
         let error_message = "This User Does Not Have Any Posts!";
         posts_div.innerHTML = error_markup(error_message);
-        
       } else {
         const markup = posts.map(({content, name, date}) => {
           return `<div class="mb-3">
@@ -43,7 +44,8 @@ function createPostsDashboard() {
     }
 
     if (this.readyState == 4 && this.status == 500) {
-      let error_message = "This User Does Not Exist!";
+      let error_message = `${
+      window.location.pathname.split("/")[1]}'s Profile Does Not Exist`;
       posts_div.innerHTML = error_markup(error_message);
     }
   };
@@ -51,7 +53,7 @@ function createPostsDashboard() {
   Http.send();
 }
 
-function createProfileHeader(){
+function createProfileHeader(error_markup) {
   var header_div = document.getElementById("profile_header");
   const Http = new XMLHttpRequest();
   const url = `${window.location.protocol}//${window.location.host}/api${window.location.pathname}`;
@@ -59,21 +61,21 @@ function createProfileHeader(){
     if (this.readyState == 4 && this.status == 200) {
       const user = JSON.parse(Http.responseText);
 
-      if (!user || user.length == 0) {     
-        header_div.innerHTML = `<h1>Error Displaying ${window.location.pathname.split('/')[1]}'s Profile</h1>`;
-        
+      if (!user || user.length == 0) {
+        header_div.innerHTML = `<h1>Error Displaying ${
+        window.location.pathname.split("/")[1]}'s Profile</h1>`;
       } else {
-        
-        header_div.innerHTML = `<h1>${user.name}'s Profile</h1>`;
+        let header = `<div class="card">
+        <div class="card-body">
+          <h1 class="card-title">${user.name}'s Profile</h1>
+          <h6 class="card-subtitle mb-2 text-muted">Following: ${user.following.length}  Followers: ${user.followers.length}</h6>
+          <button type="button" class="btn btn-outline-primary float-end" id="follow_btn">Follow</button>
+        </div>
+      </div>`;
+        header_div.innerHTML = header;
       }
-    }
-
-    if (this.readyState == 4 && this.status == 500) {
-      header_div.innerHTML = `<h1>${window.location.pathname.split('/')[1]}'s Profile Does Not Exist</h1>`;
     }
   };
   Http.open("GET", url);
   Http.send();
-
-
 }
