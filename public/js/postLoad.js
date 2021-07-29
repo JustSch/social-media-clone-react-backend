@@ -68,8 +68,9 @@ function createProfileHeader(error_markup) {
         let header = `<div class="card">
         <div class="card-body">
           <h1 class="card-title">${user.name}'s Profile</h1>
-          <h6 class="card-subtitle mb-2 text-muted">Following: ${user.following.length}  Followers: ${user.followers.length}</h6>
-          <button type="button" class="btn btn-outline-primary float-end" id="follow_btn">Follow</button>
+          <h6 class="card-subtitle mb-2 text-muted">Following: ${user.following.length}  Followers: ${user.followers.length}
+            <button type="button" class="btn btn-outline-primary float-end" id="follow_btn">Follow</button>
+          </h6>  
         </div>
       </div>`;
         header_div.innerHTML = header;
