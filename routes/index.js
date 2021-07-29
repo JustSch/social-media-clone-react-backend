@@ -37,7 +37,7 @@ router.get("/api/:username/posts", function (req, res) {
   });
 });
 
-router.get("/api/:username", ensureAuthenticatedProfile, function (req, res) {
+router.get("/api/:username", function (req, res) {
   User.findOne({
     name: req.params.username
   }, function (err, users) {
