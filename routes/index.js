@@ -82,6 +82,23 @@ router.get("/api/user/isAuthenticated", function (req, res) {
   }
 });
 
+router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
+  var username ="";
+  User.findOne({
+    name: username
+  }, function (err, users) {
+    if (err) 
+      return console.error(err);
+    
+    if (users) {
+     //update logged in user by adding found user's id to following and adding to followers of found user
+    } else {
+      res.sendStatus(500);
+    }
+  });
+  res.send("hi");
+});
+
 //Profile Routes
 router.get("/:username/", (req, res) =>
 //check if valid username or give error page

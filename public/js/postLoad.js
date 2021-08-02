@@ -74,9 +74,46 @@ function createProfileHeader(error_markup) {
         </div>
       </div>`;
         header_div.innerHTML = header;
+        followStatus();
       }
     }
   };
   Http.open("GET", url);
   Http.send();
 }
+
+function followStatus(){
+
+  const Http = new XMLHttpRequest();
+  const url = `${window.location.protocol}//${window.location.host}/api/isFollowing${window.location.pathname}`;
+  var following;
+  Http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {     
+      const response = JSON.parse(Http.responseText);
+      following = response.isFollowing;
+      followStatusChange(following);
+      
+    }
+  };
+  Http.open("GET", url);
+  Http.send();
+
+}
+
+function followStatusChange(following){
+  var follow_status = document.getElementById("follow_btn");
+
+  if (following){
+    follow_status.addEventListener("mouseover",()=> follow_status.innerHTML="Unfollow");
+    follow_status.addEventListener("mouseout",()=> follow_status.innerHTML="Following");
+  }
+  
+  else {
+    follow_status.addEventListener("click",()=> follow_status.innerHTML="clicked");
+  }
+}
+
+function followStatusRequest(following){
+  //send request with following status
+}
+
