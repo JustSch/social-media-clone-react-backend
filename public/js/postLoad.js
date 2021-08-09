@@ -104,16 +104,30 @@ function followStatusChange(following){
   var follow_status = document.getElementById("follow_btn");
 
   if (following){
+    follow_status.innerHTML="Following";
     follow_status.addEventListener("mouseover",()=> follow_status.innerHTML="Unfollow");
     follow_status.addEventListener("mouseout",()=> follow_status.innerHTML="Following");
+    follow_status.addEventListener("click",() => follow_status.innerHTML="I'm Pomu");
   }
   
   else {
-    follow_status.addEventListener("click",()=> follow_status.innerHTML="clicked");
+    follow_status.addEventListener("click",() => follow_status.innerHTML=followStatusRequest(following));
   }
 }
 
 function followStatusRequest(following){
-  //send request with following status
+  //make sure you cant follow yourself send request
+  var request_json = {"username": window.location.pathname.split("/")[1]};
+  var request = new XMLHttpRequest();
+  request.open("POST","/api/user/follow/");
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send(JSON.stringify(request_json));
+
+  //if recieves redirect to login page display modal asking to log in
+  return "Following";
+}
+
+function profileOwner(){
+  //check if profile belongs to loggedin user
 }
 

@@ -63,7 +63,7 @@ router.get("/api/isFollowing/:username", function (req, res) {
       if (err) 
         return console.error(err);
       if (users) {
-        if (req.user.following.includes(req.params.userID)) {
+        if (req.user.following.includes(users.id)) {
           res.json({isFollowing: true});
         } else {
           res.json({isFollowing: false});
@@ -83,7 +83,9 @@ router.get("/api/user/isAuthenticated", function (req, res) {
 });
 
 router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
-  var username =req.body[0].username;
+  
+  var username =req.body.username;
+  console.log(username);
   var newFollower ="";
   User.findOne({
     name: username
@@ -92,26 +94,29 @@ router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
       return console.error(err);
     
     if (users) {
-     newFollower = users[0]._id;
+     newFollower = users.id;
+     console.log(users.id);
      User.updateOne({name: req.user.name},{ $addToSet: {following: [newFollower]}}, function(err2, result){
       if (err2) {
         res.send(err2);
-      } else {
-        return;
       } 
      });
-     User.updateOne({_id: newFollower},{ $addToSet: {follower: [req.params.id]}}, function(err3, result){
+     User.updateOne({name: users.name},{ $addToSet: {followers: [req.user.id]}}, function(err3, result){
       if (err3) {
         res.send(err3);
-      } else {
-        return;
-      } 
+      }  
+      else {
+        console.log(result);
+      }
      });
     } else {
       res.sendStatus(500);
+      return;
     }
+
+    res.sendStatus(200);
   });
-  res.send("hi");
+  
 });
 
 //Profile Routes
