@@ -167,6 +167,10 @@ function profileOwner(){
   //check if profile belongs to loggedin user
 }
 
+function updateFollowerCount(){
+  //request to update follower count
+}
+
 function authenticationStatus(){
   const Http = new XMLHttpRequest();
   const url = '/api/user/isAuthenticated';
