@@ -119,6 +119,43 @@ router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
   
 });
 
+router.post("/api/user/unfollow/", ensureAuthenticated, function(req,res) {
+  
+  var username =req.body.username;
+  console.log(username);
+  var follower ="";
+  User.findOne({
+    name: username
+  }, function (err, users) {
+    if (err) 
+      return console.error(err);
+    
+    if (users) {
+     follower = users.id;
+     console.log(users.id);
+     User.updateOne({name: req.user.name},{ $pullAll : {following: [follower]}}, function(err4, result){
+      if (err4) {
+        res.send(err4);
+      } 
+     });
+     User.updateOne({name: users.name},{ $pullAll : {followers: [req.user.id]}}, function(err5, result){
+      if (err5) {
+        res.send(err5);
+      }  
+      else {
+        console.log(result);
+      }
+     });
+    } else {
+      res.sendStatus(500);
+      return;
+    }
+
+    res.sendStatus(200);
+  });
+  
+});
+
 //Profile Routes
 router.get("/:username/", (req, res) =>
 //check if valid username or give error page
