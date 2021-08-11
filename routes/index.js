@@ -85,7 +85,6 @@ router.get("/api/user/isAuthenticated", function (req, res) {
 router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
   
   var username =req.body.username;
-  console.log(username);
   var newFollower ="";
   User.findOne({
     name: username
@@ -95,7 +94,6 @@ router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
     
     if (users) {
      newFollower = users.id;
-     console.log(users.id);
      User.updateOne({name: req.user.name},{ $addToSet: {following: [newFollower]}}, function(err2, result){
       if (err2) {
         res.send(err2);
@@ -122,7 +120,6 @@ router.post("/api/user/follow/", ensureAuthenticated, function(req,res) {
 router.post("/api/user/unfollow/", ensureAuthenticated, function(req,res) {
   
   var username =req.body.username;
-  console.log(username);
   var follower ="";
   User.findOne({
     name: username
@@ -132,7 +129,6 @@ router.post("/api/user/unfollow/", ensureAuthenticated, function(req,res) {
     
     if (users) {
      follower = users.id;
-     console.log(users.id);
      User.updateOne({name: req.user.name},{ $pullAll : {following: [follower]}}, function(err4, result){
       if (err4) {
         res.send(err4);

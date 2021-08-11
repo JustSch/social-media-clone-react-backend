@@ -91,7 +91,7 @@ function followStatus(){
     if (this.readyState == 4 && this.status == 200) {     
       const response = JSON.parse(Http.responseText);
       following = response.isFollowing;
-      followStatusChange(following);
+      followStatusInit(following);
       
     }
   };
@@ -100,33 +100,62 @@ function followStatus(){
 
 }
 
-function followStatusChange(following){
+function followStatusInit(following){
   var follow_status = document.getElementById("follow_btn");
 
   if (following){
     follow_status.innerHTML="Following";
     follow_status.addEventListener("mouseover",()=> follow_status.innerHTML="Unfollow");
     follow_status.addEventListener("mouseout",()=> follow_status.innerHTML="Following");
-    follow_status.addEventListener("click",() => follow_status.innerHTML="I'm Pomu");
+    follow_status.addEventListener("click",() => unFollowStatusRequest(following));
   }
   
   else {
-    follow_status.addEventListener("click",() => follow_status.innerHTML=followStatusRequest(following));
+    follow_status.addEventListener("click",()=>followStatusRequest(follow_status));
   }
 }
 
-function followStatusRequest(following){
-  //make sure you cant follow yourself send request
+function followStatusRequest(follow_status){
+  //make sure you cant follow yourself then send request
   var request_json = {"username": window.location.pathname.split("/")[1]};
   var request = new XMLHttpRequest();
   request.open("POST","/api/user/follow/");
   request.setRequestHeader("Content-Type", "application/json");
   request.send(JSON.stringify(request_json));
 
+
+  //change to set this only when sucessfull
+  follow_status.innerHTML="Following";
+  follow_status.addEventListener("mouseover",mouseOverEvent);
+  follow_status.addEventListener("mouseout",mouseOutEvent);
+  follow_status.addEventListener("click",() => unFollowStatusRequest(follow_status));
+
   //if recieves redirect to login page display modal asking to log in
-  return "Following";
+  
 }
 
+function unFollowStatusRequest(follow_status){
+  var request_json = {"username": window.location.pathname.split("/")[1]};
+  var request = new XMLHttpRequest();
+  request.open("POST","/api/user/unfollow/");
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send(JSON.stringify(request_json));
+
+  follow_status.innerHTML="Follow";
+  follow_status.removeEventListener("mouseover",mouseOverEvent);
+  follow_status.removeEventListener("mouseout",mouseOutEvent);
+  follow_status.addEventListener("click",()=>followStatusRequest(follow_status));
+
+}
+function mouseOverEvent (){
+  let follow_status = document.getElementById("follow_btn");
+  follow_status.innerHTML = "Following";
+}
+
+function mouseOutEvent(){
+  let follow_status = document.getElementById("follow_btn");
+  follow_status.innerHTML="Unfollow";
+}
 function profileOwner(){
   //check if profile belongs to loggedin user
 }
