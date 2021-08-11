@@ -74,6 +74,7 @@ function createProfileHeader(error_markup) {
         </div>
       </div>`;
         header_div.innerHTML = header;
+        //only if logged in check followstatus else bring up modal when clicked
         followStatus();
       }
     }
@@ -116,7 +117,6 @@ function followStatusInit(following){
 }
 
 function followStatusRequest(follow_status){
-  //make sure you cant follow yourself then send request
   var request_json = {"username": window.location.pathname.split("/")[1]};
   var request = new XMLHttpRequest();
   request.open("POST","/api/user/follow/");
@@ -160,3 +160,6 @@ function profileOwner(){
   //check if profile belongs to loggedin user
 }
 
+function loginStatus(){
+  //check if logged in
+}
