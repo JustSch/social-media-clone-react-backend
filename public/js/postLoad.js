@@ -1,3 +1,4 @@
+var isAuthenticated;
 window.onload = function () {
   const error_markup = error_message => {
     return `<div class="row mt-5">
@@ -8,7 +9,7 @@ window.onload = function () {
         </div>
       </div>`;
   };
-
+  authenticationStatus();
   createProfileHeader(error_markup);
   createPostsDashboard(error_markup);
 };
@@ -74,8 +75,10 @@ function createProfileHeader(error_markup) {
         </div>
       </div>`;
         header_div.innerHTML = header;
-        //only if logged in check followstatus else bring up modal when clicked
-        followStatus();
+        if (isAuthenticated){
+          followStatus();
+        }
+        
       }
     }
   };
@@ -106,17 +109,18 @@ function followStatusInit(following){
 
   if (following){
     follow_status.innerHTML="Following";
-    follow_status.addEventListener("mouseover",()=> follow_status.innerHTML="Unfollow");
-    follow_status.addEventListener("mouseout",()=> follow_status.innerHTML="Following");
-    follow_status.addEventListener("click",() => unFollowStatusRequest(following));
+    follow_status.addEventListener("mouseover",mouseOverEvent);
+    follow_status.addEventListener("mouseout",mouseOutEvent);
+    follow_status.addEventListener("click",unFollowStatusRequest);
   }
   
   else {
-    follow_status.addEventListener("click",()=>followStatusRequest(follow_status));
+    follow_status.addEventListener("click",followStatusRequest);
   }
 }
 
-function followStatusRequest(follow_status){
+function followStatusRequest(){
+  let follow_status = document.getElementById("follow_btn");
   var request_json = {"username": window.location.pathname.split("/")[1]};
   var request = new XMLHttpRequest();
   request.open("POST","/api/user/follow/");
@@ -126,15 +130,17 @@ function followStatusRequest(follow_status){
 
   //change to set this only when sucessfull
   follow_status.innerHTML="Following";
+  follow_status.removeEventListener("click",followStatusRequest);
   follow_status.addEventListener("mouseover",mouseOverEvent);
   follow_status.addEventListener("mouseout",mouseOutEvent);
-  follow_status.addEventListener("click",() => unFollowStatusRequest(follow_status));
+  follow_status.addEventListener("click",unFollowStatusRequest);
 
   //if recieves redirect to login page display modal asking to log in
   
 }
 
-function unFollowStatusRequest(follow_status){
+function unFollowStatusRequest(){
+  let follow_status = document.getElementById("follow_btn");
   var request_json = {"username": window.location.pathname.split("/")[1]};
   var request = new XMLHttpRequest();
   request.open("POST","/api/user/unfollow/");
@@ -142,9 +148,10 @@ function unFollowStatusRequest(follow_status){
   request.send(JSON.stringify(request_json));
 
   follow_status.innerHTML="Follow";
+  follow_status.removeEventListener("click",unFollowStatusRequest);
   follow_status.removeEventListener("mouseover",mouseOverEvent);
   follow_status.removeEventListener("mouseout",mouseOutEvent);
-  follow_status.addEventListener("click",()=>followStatusRequest(follow_status));
+  follow_status.addEventListener("click",followStatusRequest);
 
 }
 function mouseOverEvent (){
@@ -160,6 +167,17 @@ function profileOwner(){
   //check if profile belongs to loggedin user
 }
 
-function loginStatus(){
-  //check if logged in
+function authenticationStatus(){
+  const Http = new XMLHttpRequest();
+  const url = '/api/user/isAuthenticated';
+  Http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {     
+      const response = JSON.parse(Http.responseText);
+      isAuthenticated=response.isAuthenticated;
+      
+    }
+  };
+  Http.open("GET", url);
+  Http.send();
+
 }
