@@ -6,13 +6,13 @@ const {ensureAuthenticatedProfile} = require("../config/authprofile");
 const Post = require("../models/posts");
 const User = require("../models/user");
 
-router.get("/", ensureAuthenticatedHome, (req, res) => res.redirect("/postDashboard"));
+router.get("/", ensureAuthenticatedHome, (req, res) => res.redirect("/dashboard"));
 
-router.get("/dashboard", ensureAuthenticated, (req, res) => res.render("dashboard", {name: req.user.name}));
+router.get("/templateDashboard", ensureAuthenticated, (req, res) => res.render("templateDashboard", {name: req.user.name}));
 
 router.get("/PostCreator", ensureAuthenticated, (req, res) => res.render("createPost"));
 
-router.get("/postDashboard", ensureAuthenticated, (req, res) => res.render("postDashboard"));
+router.get("/dashboard", ensureAuthenticated, (req, res) => res.render("dashboard"));
 
 //API Routes
 router.get("/api/:username/posts", function (req, res) {
