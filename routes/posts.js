@@ -20,7 +20,7 @@ router.post('/createPost',ensureAuthenticated,(req,res) => {
 
     else {
         const newPost = new Post;
-        newPost.userID = req.user.id;
+        newPost.userID = req.user._id;
         newPost.content = message.message;
         newPost.save().then(user => {
         req.flash('success_msg', 'Post Submitted Successfully');

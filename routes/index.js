@@ -152,6 +152,25 @@ router.post("/api/user/unfollow/", ensureAuthenticated, function(req,res) {
   
 });
 
+router.get("/api/post/postDashboard", ensureAuthenticated, function(req, res){
+  var followedUserIDs = req.user.following;
+  Post.find({
+    userID: followedUserIDs
+  }, function (err5, posts) {
+    if (err5) 
+      return console.error(err5);
+
+    const post_result = posts.map(({userID, date, content}) => {
+      return {name: userID.name, date: date, content: content};
+    });
+    
+    res.send(post_result);
+       
+  }).populate('userID').sort("-date");
+
+});
+
+
 //Profile Routes
 router.get("/:username/", (req, res) =>
 //check if valid username or give error page

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
     userID:{
-        type : String
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User' 
     }, 
     date:{
         type : Date,
