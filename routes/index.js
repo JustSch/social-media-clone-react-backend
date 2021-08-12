@@ -6,11 +6,13 @@ const {ensureAuthenticatedProfile} = require("../config/authprofile");
 const Post = require("../models/posts");
 const User = require("../models/user");
 
-router.get("/", ensureAuthenticatedHome, (req, res) => res.redirect("/dashboard"));
+router.get("/", ensureAuthenticatedHome, (req, res) => res.redirect("/postDashboard"));
 
 router.get("/dashboard", ensureAuthenticated, (req, res) => res.render("dashboard", {name: req.user.name}));
 
 router.get("/PostCreator", ensureAuthenticated, (req, res) => res.render("createPost"));
+
+router.get("/postDashboard", ensureAuthenticated, (req, res) => res.render("postDashboard"));
 
 //API Routes
 router.get("/api/:username/posts", function (req, res) {
@@ -163,13 +165,12 @@ router.get("/api/post/postDashboard", ensureAuthenticated, function(req, res){
     const post_result = posts.map(({userID, date, content}) => {
       return {name: userID.name, date: date, content: content};
     });
-    
+
     res.send(post_result);
        
   }).populate('userID').sort("-date");
 
 });
-
 
 //Profile Routes
 router.get("/:username/", (req, res) =>
