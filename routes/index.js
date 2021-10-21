@@ -172,6 +172,25 @@ router.get("/api/post/postDashboard", ensureAuthenticated, function(req, res){
 
 });
 
+router.get("/api/search/:username",function(req, res){
+  User.find({
+    name: {$regex: req.params.username}
+  }, function (errr, users) {
+    if (errr)
+      return console.log(errr);
+    if (users) {
+      const result = users.map(({name}) => {
+        return {name: name};
+      });
+      
+      res.json(result);
+    }
+    else {
+      res.sendStatus(404);
+    }
+  });
+});
+
 //Profile Routes
 router.get("/:username/", (req, res) =>
 //check if valid username or give error page
@@ -180,5 +199,8 @@ res.render("profile"));
 router.get("/:username/post/:postID", (req, res) =>
 //check if valid username and valid post id
 res.send("username: " + req.params.username + " postID: " + req.params.postID));
+
+
+//TODO create link to users displayed in posts and ability to search and follow from search and hide follow on own account
 
 module.exports = router;
