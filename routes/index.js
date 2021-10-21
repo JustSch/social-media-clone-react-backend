@@ -202,5 +202,6 @@ res.send("username: " + req.params.username + " postID: " + req.params.postID));
 
 
 //TODO create link to users displayed in posts and ability to search and follow from search and hide follow on own account
+//change logos
 
 module.exports = router;

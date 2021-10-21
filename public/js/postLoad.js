@@ -31,7 +31,7 @@ function createPostsDashboard(error_markup) {
           return `<div class="mb-3">
                       <div class="col-md-6 m-auto">
                         <div class="card">
-                        <h4 class="card-header">${name}</h4>
+                        <h4 class="card-header"><a href=${window.location.protocol}//${window.location.host}/${name}>${name}</a></h4>
                         <div class="card-body">
                           <h6 class="card-subtitle mb-2 text-muted">${date}</h6>
                           <p class="card-text">${content}</p>
