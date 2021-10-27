@@ -35,20 +35,48 @@ function createPostsDashboard(error_markup) {
         let error_message = "There are no Posts! Follow Other Users To See Posts Here.";
         posts_div.appendChild(error_markup(error_message));
       } else {
-        const markup = posts.map(({content, name, date}) => {
-          return `<div class="mb-3">
-                        <div class="col-md-6 m-auto">
-                          <div class="card">
-                          <h4 class="card-header"><a href=${window.location.protocol}//${window.location.host}/${name}>${name}</a></h4>
-                          <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">${date}</h6>
-                            <p class="card-text">${content}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>`;
-        }).join("");
-        posts_div.innerHTML = markup;
+          const post_markup = function(name, content, date){
+          var outerDiv = document.createElement("div");
+          outerDiv.setAttribute("class","mb-3");
+          var colDiv = document.createElement("div");
+          colDiv.setAttribute("class","col-md-6 m-auto");
+          var cardElement = document.createElement("div");
+          cardElement.setAttribute("class","card");
+          var hElement = document.createElement("h4");
+          hElement.setAttribute("class","card-header");
+          var aElement = document.createElement("a");
+          aElement.setAttribute("href",`${window.location.protocol}//${window.location.host}/${name}`);
+          var hText = document.createTextNode(name);
+          aElement.appendChild(hText);
+          var bodyElement = document.createElement("div");
+          bodyElement.setAttribute("class","card-body");
+          var h6Element = document.createElement("h6");
+          h6Element.setAttribute("class","card-subtitle mb-2 text-muted");
+
+          var h6Text = document.createTextNode(date);
+          h6Element.appendChild(h6Text);
+
+          var pElement = document.createElement("P");
+          pElement.setAttribute("class","card-text");
+          var textElement = document.createTextNode(content);
+          pElement.appendChild(textElement);
+
+          bodyElement.appendChild(h6Element);
+          bodyElement.appendChild(pElement);
+
+          hElement.appendChild(aElement);
+
+          cardElement.appendChild(hElement);
+          cardElement.appendChild(bodyElement);
+          colDiv.appendChild(cardElement);
+          outerDiv.appendChild(colDiv);
+
+          return outerDiv;
+        };
+
+        posts.forEach(post => {
+          posts_div.appendChild(post_markup(post.name,post.content,post.date));
+        });
       }
     }
 
@@ -65,15 +93,57 @@ function createPostsDashboard(error_markup) {
 function createDashboardHeader() {
   var header_div = document.getElementById("dashboard_header");
 
-  let header = `<div class="card">
-        <div class="card-body">
-          <h1 class="card-title">Dashboard</h1>
-          <h6 class="card-subtitle mb-2 text-muted">
-            <p class="lead mb-3">Create a Post <a href="/PostCreator">Here</a></p>
-            <p class="lead mb-3">Search For a User To Follow <a href="/Search">Here</a></p>
-            <a href="/users/logout" class="btn btn-outline-primary float-end">Logout</a>
-          </h6>  
-        </div>
-      </div>`;
-  header_div.innerHTML = header;
+  var header_markup = function (){
+    var cardElement = document.createElement("div");
+    cardElement.setAttribute("class","card");
+
+    var bodyElement = document.createElement("div");
+    bodyElement.setAttribute("class","card-body");
+
+    var titleElement = document.createElement("h1");
+    titleElement.setAttribute("class","card-title");
+    var titleTextElement = document.createTextNode("Dashboard");
+    titleElement.appendChild(titleTextElement);
+
+    var subtitleElement = document.createElement("h6");
+    subtitleElement.setAttribute("class","card-subtitle mb-2 text-muted");
+
+    var p0Element = document.createElement("p");
+    p0Element.setAttribute("class","lead mb-3");
+    var p0Text = document.createTextNode("Create a Post");
+    p0Element.appendChild(p0Text);
+
+    var creatorLink = document.createElement("a");
+    creatorLink.setAttribute("href","/PostCreator");
+    var creatorLinkText = document.createTextNode("Here");
+    creatorLink.appendChild(creatorLinkText);
+
+    var p1Element = document.createElement("p");
+    p1Element.setAttribute("class","lead mb-3");
+    var p1Text = document.createTextNode("Search For a User to Follow");
+    p1Element.appendChild(p1Text);
+
+    var searchLink = document.createElement("a");
+    searchLink.setAttribute("href","/PostCreator");
+    var searchLinkText = document.createTextNode("Here");
+    searchLink.appendChild(searchLinkText);
+
+    var logOutBtn = document.createElement("a");
+    logOutBtn.setAttribute("href","/users/logout");
+    logOutBtn.setAttribute("class","btn btn-outline-primary float-end");
+    var logOuttxt = document.createTextNode("Logout");
+    logOutBtn.appendChild(logOuttxt);
+
+    subtitleElement.appendChild(p0Element);
+    subtitleElement.appendChild(p1Element);
+    subtitleElement.appendChild(logOutBtn);
+
+    bodyElement.appendChild(titleElement);
+    bodyElement.appendChild(subtitleElement);
+
+    cardElement.appendChild(bodyElement);
+    return cardElement;
+
+  };
+  header_div.appendChild(header_markup());
 }
