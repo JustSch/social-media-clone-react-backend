@@ -75,6 +75,7 @@ function createProfileHeader(error_markup) {
         </div>
       </div>`;
         header_div.innerHTML = header;
+        //if authenticated and profile is not the users show follow status
         if (isAuthenticated){
           followStatus();
         }

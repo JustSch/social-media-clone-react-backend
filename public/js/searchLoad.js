@@ -16,22 +16,42 @@ function search() {
 }
 
 function searching() {
+  const resultElement = document.getElementById("results");
+  while (resultElement.children.length > 2){
+    resultElement.removeChild(resultElement.lastChild);
+  }
+
   var value = document.getElementById("search").value;
   if (value) {
-    //use for template  
-    var node = document.createElement("P");
-    var textNode = document.createTextNode(value);
-    node.setAttribute("tag", "result");
-    node.appendChild(textNode);
-    document.getElementById("results").appendChild(node);
+    const Http = new XMLHttpRequest();
+    const url = `/api/search/${value}`;
+    var node;
+    var textNode;
+    Http.onreadystatechange = function (){
+      if (this.readyState == 4 && this.status == 200){
+        const users = JSON.parse(Http.responseText);
+        if (users.length == 0){
+          node = document.createElement("P");
+          textNode = document.createTextNode("There were no users found for your search terms");
+          node.appendChild(textNode);
+          resultElement.appendChild(node);
+        }
+        else {
+          users.forEach(function(user) {
+            node = document.createElement("P");
+            var hNode = document.createElement("a");
+            hNode.setAttribute("href",`/${user.name}`);
+            textNode = document.createTextNode(user.name);
 
-    node = document.createElement("P");
-    textNode = document.createTextNode(value);
-    node.setAttribute("tag", "result");
-    var n = document.createElement("a");
-    n.setAttribute("href","#");
-    n.appendChild(textNode);
-    node.appendChild(n);
-    document.getElementById("results").appendChild(node);
+            hNode.appendChild(textNode);
+            node.appendChild(hNode);
+            resultElement.appendChild(node);
+          });
+        }
+      }
+    }
+    Http.open("GET",url);
+    Http.send();
+
   }
 }

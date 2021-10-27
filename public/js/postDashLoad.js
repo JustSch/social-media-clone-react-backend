@@ -51,16 +51,18 @@ function createPostsDashboard(error_markup) {
   Http.send();
 }
 
-function createDashboardHeader(){
+function createDashboardHeader() {
   var header_div = document.getElementById("dashboard_header");
 
   let header = `<div class="card">
         <div class="card-body">
           <h1 class="card-title">Dashboard</h1>
-          <h6 class="card-subtitle mb-2 text-muted"><p class="lead mb-3">Create a Post <a href="/PostCreator">Here</a></p>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <p class="lead mb-3">Create a Post <a href="/PostCreator">Here</a></p>
+            <p class="lead mb-3">Search For a User To Follow <a href="/Search">Here</a></p>
             <a href="/users/logout" class="btn btn-outline-primary float-end">Logout</a>
           </h6>  
         </div>
       </div>`;
-        header_div.innerHTML = header;
+  header_div.innerHTML = header;
 }
