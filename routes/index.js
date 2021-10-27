@@ -191,6 +191,10 @@ router.get("/api/search/:username",function(req, res){
   });
 });
 
+router.get("/search",(req, res) =>
+res.render("userSearch"));
+
+
 //Profile Routes
 router.get("/:username/", (req, res) =>
 //check if valid username or give error page
