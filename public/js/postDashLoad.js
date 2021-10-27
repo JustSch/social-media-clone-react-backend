@@ -1,16 +1,26 @@
 window.onload = function () {
-  const error_markup = error_message => {
-    return `<div class="row mt-5">
-          <div class="col-md-6 m-auto">
-            <div class="card card-body">
-            <h1 class="text-center mb-3">${error_message}</h1>
-            </div>
-          </div>
-        </div>`;
+ 
+  const error_markup = function(error_message){
+    var rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class","row mt-5");
+    var colDiv = document.createElement("div");
+    colDiv.setAttribute("class","col-md-6 m-auto");
+    var cardDiv = document.createElement("div");
+    cardDiv.setAttribute("class","card card-body");
+    var hDiv = document.createElement("h1");
+    hDiv.setAttribute("class","text-center mb-3");
+    var textElement = document.createTextNode(error_message);
+
+    hDiv.appendChild(textElement);
+    cardDiv.appendChild(hDiv);
+    colDiv.appendChild(cardDiv);
+    rowDiv.appendChild(colDiv);
+    return rowDiv;
   };
   createDashboardHeader();
   createPostsDashboard(error_markup);
 };
+
 
 function createPostsDashboard(error_markup) {
   var posts_div = document.getElementById("posts");
@@ -23,7 +33,7 @@ function createPostsDashboard(error_markup) {
 
       if (!posts || posts.length == 0) {
         let error_message = "There are no Posts! Follow Other Users To See Posts Here.";
-        posts_div.innerHTML = error_markup(error_message);
+        posts_div.appendChild(error_markup(error_message));
       } else {
         const markup = posts.map(({content, name, date}) => {
           return `<div class="mb-3">
@@ -44,7 +54,8 @@ function createPostsDashboard(error_markup) {
 
     if (this.readyState == 4 && this.status == 500) {
       let error_message = "There Was An Error Loading Your Dashboard!";
-      posts_div.innerHTML = error_markup(error_message);
+      
+      posts_div.appendChild(error_markup(error_message));
     }
   };
   Http.open("GET", url);
