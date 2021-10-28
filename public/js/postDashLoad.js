@@ -51,8 +51,6 @@ function createPostsDashboard(error_markup) {
           bodyElement.setAttribute("class","card-body");
           var h6Element = document.createElement("h6");
           h6Element.setAttribute("class","card-subtitle mb-2 text-muted");
-
-          
           h6Element.textContent = date;
 
           var pElement = document.createElement("P");
