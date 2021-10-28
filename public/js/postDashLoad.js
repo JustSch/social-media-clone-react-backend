@@ -9,9 +9,8 @@ window.onload = function () {
     cardDiv.setAttribute("class","card card-body");
     var hDiv = document.createElement("h1");
     hDiv.setAttribute("class","text-center mb-3");
-    var textElement = document.createTextNode(error_message);
 
-    hDiv.appendChild(textElement);
+    hDiv.textContent = error_message;
     cardDiv.appendChild(hDiv);
     colDiv.appendChild(cardDiv);
     rowDiv.appendChild(colDiv);
@@ -46,20 +45,19 @@ function createPostsDashboard(error_markup) {
           hElement.setAttribute("class","card-header");
           var aElement = document.createElement("a");
           aElement.setAttribute("href",`${window.location.protocol}//${window.location.host}/${name}`);
-          var hText = document.createTextNode(name);
-          aElement.appendChild(hText);
+         
+          aElement.textContent = name;
           var bodyElement = document.createElement("div");
           bodyElement.setAttribute("class","card-body");
           var h6Element = document.createElement("h6");
           h6Element.setAttribute("class","card-subtitle mb-2 text-muted");
 
-          var h6Text = document.createTextNode(date);
-          h6Element.appendChild(h6Text);
+          
+          h6Element.textContent = date;
 
           var pElement = document.createElement("P");
           pElement.setAttribute("class","card-text");
-          var textElement = document.createTextNode(content);
-          pElement.appendChild(textElement);
+          pElement.textContent = content;
 
           bodyElement.appendChild(h6Element);
           bodyElement.appendChild(pElement);
@@ -102,37 +100,31 @@ function createDashboardHeader() {
 
     var titleElement = document.createElement("h1");
     titleElement.setAttribute("class","card-title");
-    var titleTextElement = document.createTextNode("Dashboard");
-    titleElement.appendChild(titleTextElement);
+    titleElement.innerText = "Dashboard";
 
     var subtitleElement = document.createElement("h6");
     subtitleElement.setAttribute("class","card-subtitle mb-2 text-muted");
 
     var p0Element = document.createElement("p");
     p0Element.setAttribute("class","lead mb-3");
-    var p0Text = document.createTextNode("Create a Post");
-    p0Element.appendChild(p0Text);
+    p0Element.textContent = "Create a Post";
 
     var creatorLink = document.createElement("a");
     creatorLink.setAttribute("href","/PostCreator");
-    var creatorLinkText = document.createTextNode("Here");
-    creatorLink.appendChild(creatorLinkText);
+    creatorLink.textContent = "Here";
 
     var p1Element = document.createElement("p");
     p1Element.setAttribute("class","lead mb-3");
-    var p1Text = document.createTextNode("Search For a User to Follow");
-    p1Element.appendChild(p1Text);
+    p1Element.textContent = "Search For a User to Follow";
 
     var searchLink = document.createElement("a");
     searchLink.setAttribute("href","/PostCreator");
-    var searchLinkText = document.createTextNode("Here");
-    searchLink.appendChild(searchLinkText);
+    searchLink.textContent = "Here";
 
     var logOutBtn = document.createElement("a");
     logOutBtn.setAttribute("href","/users/logout");
     logOutBtn.setAttribute("class","btn btn-outline-primary float-end");
-    var logOuttxt = document.createTextNode("Logout");
-    logOutBtn.appendChild(logOuttxt);
+    logOutBtn.textContent = "Logout";
 
     subtitleElement.appendChild(p0Element);
     subtitleElement.appendChild(p1Element);
