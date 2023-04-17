@@ -109,7 +109,7 @@ function createDashboardHeader() {
 
     var creatorLink = document.createElement("a");
     creatorLink.setAttribute("href","/PostCreator");
-    creatorLink.textContent = "Here";
+    creatorLink.textContent = "Create a Post";
 
     var p1Element = document.createElement("p");
     p1Element.setAttribute("class","lead mb-3");
@@ -124,7 +124,8 @@ function createDashboardHeader() {
     logOutBtn.setAttribute("class","btn btn-outline-primary float-end");
     logOutBtn.textContent = "Logout";
 
-    subtitleElement.appendChild(p0Element);
+    //subtitleElement.appendChild(p0Element);
+    subtitleElement.appendChild(creatorLink);
     subtitleElement.appendChild(p1Element);
     subtitleElement.appendChild(logOutBtn);
 
