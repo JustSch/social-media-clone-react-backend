@@ -3,7 +3,17 @@ const router = express.Router();
 const Post = require("../models/posts");
 const User = require("../models/user");
 const { ensureAuthenticated } = require("../config/auth");
+const passport = require('passport');
 
+
+router.post('/login',passport.authenticate('local') ,(req, res) => {
+    if (!req.user){
+        res.status(401).send(error);
+    }
+    else {
+        res.status(200).send({'login': 'success'});
+    }
+  });
 
 router.get("/user/isAuthenticated", function (req, res) {
     if (req.user) {

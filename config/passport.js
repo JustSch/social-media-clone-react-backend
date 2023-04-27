@@ -15,10 +15,10 @@ module.exports = function(passport) {
         if (!user) {
           return done(null, false, { message: 'That email is not registered' });
         }
-
-        bcrypt.compare(password, user.password, (isMatch) => {
+        bcrypt.compare(password, user[0].password, (err, isMatch) => {
+          if (err) throw err;
           if (isMatch) {
-            return done(null, user);
+            return done(null, user[0]);
           } else {
             return done(null, false, { message: 'Password incorrect' });
           }
@@ -29,7 +29,7 @@ module.exports = function(passport) {
     );
   
     passport.serializeUser(function(user, done) {
-      done(null, user[0].id);
+      done(null, user.id);
     });
   
     passport.deserializeUser(async function(id, done) {
