@@ -6,14 +6,25 @@ const { ensureAuthenticated } = require("../config/auth");
 const passport = require('passport');
 
 
-router.post('/login',passport.authenticate('local') ,(req, res) => {
-    if (!req.user){
+router.post('/login', passport.authenticate('local'), (req, res) => {
+    if (!req.user) {
         res.status(401).send(error);
     }
     else {
-        res.status(200).send({'login': 'success'});
+        res.status(200).send({ 'login': 'success' });
     }
-  });
+});
+
+router.get('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            res.status(500).send({ 'logout': 'failed' });
+        }
+        else {
+            res.status(200).send({ 'logout': 'success' });
+        }
+    });
+});
 
 router.get("/user/isAuthenticated", function (req, res) {
     if (req.user) {
