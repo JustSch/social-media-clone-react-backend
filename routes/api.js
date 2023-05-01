@@ -4,7 +4,58 @@ const Post = require("../models/posts");
 const User = require("../models/user");
 const { ensureAuthenticated } = require("../config/auth");
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
+router.post('/register', async (req, res) => {
+    const { name, email, password, password2 } = req.body;
+    let errors = [];
+
+    if (!name || !email || !password || !password2) {
+        errors.push({ msg: 'Please enter all fields' });
+    }
+
+    if (password != password2) {
+        errors.push({ msg: 'Passwords do not match' });
+    }
+
+    if (password.length < 6) {
+        errors.push({ msg: 'Password must be at least 6 characters' });
+    }
+
+    if (errors.length > 0) {
+        res.status(401).json(errors);
+    }
+
+    else {
+        const user = await User.find({ email: email });
+
+        if (user[0]) {
+            res.status(401).json({ msg: 'A User With That Email Already Exists' });
+        }
+
+        else {
+            const newUser = new User({
+                name,
+                email,
+                password
+            });
+
+            bcrypt.genSalt(10, (err, salt) =>
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    newUser.password = hash;
+                    newUser.save()
+                        .then(user => {
+                            res.status(200).json({ msg: 'registration successful' });
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            res.status(401).json({ msg: 'An unknown error has occured while trying to register' });
+                        });
+                }));
+        }
+    }
+});
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
     if (!req.user) {
