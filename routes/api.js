@@ -183,23 +183,20 @@ router.get("/post/postDashboard", ensureAuthenticated, async function (req, res)
     res.send(post_result);
 });
 
-router.get("/search/:username", function (req, res) {
-    User.find({
-        name: { $regex: req.params.username }
-    }, function (errr, users) {
-        if (errr)
-            return console.log(errr);
-        if (users) {
-            const result = users.map(({ name }) => {
-                return { name: name };
-            });
+router.get("/search/:username", async function (req, res) {
 
-            res.json(result);
-        }
-        else {
-            res.sendStatus(404);
-        }
-    });
+    const users = await User.find({ name: { $regex: req.params.username } });
+
+    if (!users){
+        res.status(404).send("No Users Could Be Found");
+    }
+
+    else {
+        const result = users.map(({ name }) => {
+            return { name: name };
+        });
+        res.json(result);
+    }
 });
 
 
