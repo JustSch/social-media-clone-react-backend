@@ -76,7 +76,26 @@ router.get('/logout', (req, res) => {
         }
     });
 });
+router.post("/createPost", ensureAuthenticated, (req, res) => {
+    if (!req.body.message) {
+        res.status(401).send("You Can Not Create An Empty Post!");
+    }
+    else {
+        const newPost = new Post;
+        newPost.userID = req.user._id;
+        newPost.content = req.body.message;
+        newPost.save()
+            .then((user) => {
+                res.status(200).send("Post Sent Successfully");
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(401).send("An unknown error occured while creating your post");
+            });
 
+    }
+
+});
 router.get("/user/isAuthenticated", function (req, res) {
     if (req.user) {
         res.json({ isAuthenticated: true });
