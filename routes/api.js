@@ -187,7 +187,7 @@ router.get("/search/:username", async function (req, res) {
 
     const users = await User.find({ name: { $regex: req.params.username } });
 
-    if (!users){
+    if (!users) {
         res.status(404).send("No Users Could Be Found");
     }
 
@@ -201,27 +201,26 @@ router.get("/search/:username", async function (req, res) {
 
 
 router.get("/:username/posts", async function (req, res) {
-
-    const users = await Post.find({ name: req.params.username });
-
-    if (!users) console.log("could not find user")
-    else {
-        const posts = Post.find({ userID: users._id }).sort("-date");
-
-        if (posts) {
-            const result = posts.map(({ content, date }) => {
-                return { name: users.name, content: content, date: date };
-            });
-            res.json(result);
-        }
-        else {
-            res.sendStatus(500);
-        }
+    const users = await User.find({ name: req.params.username });  
+    if (users[0]) {
+        const posts = await Post.find({ userID: users[0]._id }).sort("-date");
+        const result = posts.map(({ content, date }) => {
+            return { name: users.name, content: content, date: date };
+        });
+        res.json(result);
     }
+    else {
+        res.json([]);
+    }
+
 });
 
-router.get("/:username", function (req, res) {
-    User.findOne({
+router.get("/:username", async function (req, res) {
+
+    const users = await User.find({ name: req.params.username });
+
+
+    /* User.findOne({
         name: req.params.username
     }, function (err, users) {
         if (err)
@@ -235,7 +234,7 @@ router.get("/:username", function (req, res) {
         } else {
             res.sendStatus(500);
         }
-    });
+    }); */
 });
 
 router.get("/isFollowing/:username", function (req, res) {
