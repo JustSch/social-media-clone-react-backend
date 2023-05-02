@@ -200,8 +200,8 @@ router.get("/search/:username", async function (req, res) {
 });
 
 
-router.get("/:username/posts", async function (req, res) {
-    const users = await User.find({ name: req.params.username });  
+router.get("/user/:username/posts", async function (req, res) {
+    const users = await User.find({ name: req.params.username });
     if (users[0]) {
         const posts = await Post.find({ userID: users[0]._id }).sort("-date");
         const result = posts.map(({ content, date }) => {
@@ -210,31 +210,22 @@ router.get("/:username/posts", async function (req, res) {
         res.json(result);
     }
     else {
-        res.json([]);
+        res.status(404).json([]);
     }
 
 });
 
-router.get("/:username", async function (req, res) {
-
+router.get("/user/:username", async function (req, res) {
     const users = await User.find({ name: req.params.username });
-
-
-    /* User.findOne({
-        name: req.params.username
-    }, function (err, users) {
-        if (err)
-            return console.error(err);
-
-        if (users) {
-            const result = user => {
-                return { name: user.name, following: user.following, followers: user.followers };
-            };
-            res.json(result(users));
-        } else {
-            res.sendStatus(500);
-        }
-    }); */
+    if (users[0]) {
+        const result = user => {
+            return { name: user.name, following: user.following, followers: user.followers };
+        };
+        res.json(result(users[0]));
+    }
+    else {
+        res.status(404).send([]);
+    }
 });
 
 router.get("/isFollowing/:username", function (req, res) {
