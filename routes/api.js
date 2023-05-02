@@ -28,9 +28,15 @@ router.post('/register', async (req, res) => {
 
     else {
         const user = await User.find({ email: email });
+        
+        const userWithName = await User.find({ name: name });
 
         if (user[0]) {
             res.status(401).json({ msg: 'A User With That Email Already Exists' });
+        }
+
+        else if(userWithName[0]){
+            res.status(401).json({ msg: 'A User With That Username Already Exists'});
         }
 
         else {
@@ -177,10 +183,14 @@ router.post("/user/unfollow/", ensureAuthenticated, function (req, res) {
 router.get("/post/postDashboard", ensureAuthenticated, async function (req, res) {
     let followedUserIDs = req.user.following;
     const posts = await Post.find({ userID: followedUserIDs }).populate('userID').sort("-date");
+    const ownPosts = await Post.find({ userID: req.user._id  }).populate('userID').sort("-date");
     const post_result = posts.map(({ userID, date, content }) => {
         return { name: userID.name, date: date, content: content };
     });
-    res.send(post_result);
+    const own_post_result = ownPosts.map(({ userID, date, content }) => {
+        return { name: userID.name, date: date, content: content };
+    });
+    res.send(own_post_result.concat(post_result).sort((a,b)=>{ return b.date - a.date}));
 });
 
 router.get("/search/:username", async function (req, res) {
@@ -205,7 +215,7 @@ router.get("/user/:username/posts", async function (req, res) {
     if (users[0]) {
         const posts = await Post.find({ userID: users[0]._id }).sort("-date");
         const result = posts.map(({ content, date }) => {
-            return { name: users.name, content: content, date: date };
+            return { name: users[0].name, content: content, date: date };
         });
         res.json(result);
     }
@@ -224,7 +234,7 @@ router.get("/user/:username", async function (req, res) {
         res.json(result(users[0]));
     }
     else {
-        res.status(404).send([]);
+        res.status(404).json([]);
     }
 });
 
