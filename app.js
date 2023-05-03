@@ -46,12 +46,7 @@ app.use(mongoSanitize());
 
 app.use(express.json());
 
-
-app.use('/users',require('./routes/users'));
-app.use('/posts',require('./routes/posts'));
 app.use('/api',require('./routes/api'));
-app.use('/',require('./routes/index'));
-
 app.use(express.static(__dirname + '/public'));
 const PORT = process.env.PORT || 5000;
 
