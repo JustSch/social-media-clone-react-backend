@@ -182,25 +182,19 @@ router.post("/user/unfollow/", ensureAuthenticated, function (req, res) {
 
 router.get("/post/postDashboard", ensureAuthenticated, async function (req, res) {
     let followedUserIDs = req.user.following;
+    followedUserIDs.push(req.user.id);
     const posts = await Post.find({ userID: followedUserIDs }).populate('userID').sort("-date");
-    const ownPosts = await Post.find({ userID: req.user._id  }).populate('userID').sort("-date");
     const post_result = posts.map(({ userID, date, content }) => {
         return { name: userID.name, date: date, content: content };
     });
-    const own_post_result = ownPosts.map(({ userID, date, content }) => {
-        return { name: userID.name, date: date, content: content };
-    });
-    res.send(own_post_result.concat(post_result).sort((a,b)=>{ return b.date - a.date}));
+    res.send(post_result);
 });
 
 router.get("/search/:username", async function (req, res) {
-
     const users = await User.find({ name: { $regex: req.params.username } });
-
     if (!users) {
         res.status(404).send("No Users Could Be Found");
     }
-
     else {
         const result = users.map(({ name }) => {
             return { name: name };
