@@ -110,46 +110,55 @@ router.get("/user/isAuthenticated", function (req, res) {
     }
 });
 
-router.post("/user/follow/", ensureAuthenticated, function (req, res) {
+router.post("/user/follow/", ensureAuthenticated,async function (req, res) {
 
     let username = req.body.username;
     let newFollower = "";
-    User.findOne({
-        name: username
-    }, function (err, users) {
-        if (err)
-            return console.error(err);
 
-        if (users) {
-            newFollower = users.id;
-            User.updateOne({ name: req.user.name }, { $addToSet: { following: [newFollower] } }, function (err2, result) {
-                if (err2) {
-                    res.send(err2);
-                }
-            });
-            User.updateOne({ name: users.name }, { $addToSet: { followers: [req.user.id] } }, function (err3, result) {
-                if (err3) {
-                    res.send(err3);
-                }
-                else {
-                    console.log(result);
-                }
-            });
-        } else {
-            res.sendStatus(500);
-            return;
+    const user = await User.find({ name: username });
+
+    if (user[0]) {
+        newFollower = user[0].id;
+        let follower = await User.updateOne({ name: req.user.name }, { $addToSet: { following: [newFollower] }});
+        let followee = await User.updateOne({ name: user[0].name }, { $addToSet: { followers: [req.user.id] }});
+        
+        if (follower.modifiedCount === 1 && followee.modifiedCount === 1){
+            res.status(200).json({msg: 'User Followed Successfully'});
         }
 
-        res.sendStatus(200);
-    });
+        else {
+            res.status(401).json({ msg: 'You can not follow a user that you already follow' });
+        }
+        
+    }
+    else {
+        res.status(500).json({msg: 'You can not follow a user that does not exist'});
+    }
 
 });
 
-router.post("/user/unfollow/", ensureAuthenticated, function (req, res) {
+router.post("/user/unfollow/", ensureAuthenticated,async function (req, res) {
 
     let username = req.body.username;
-    let follower = "";
-    User.findOne({
+
+    const user = await User.find({ name: username });
+    if (user[0]) {
+        let removedFollower = user[0].id;
+        let follower = await User.updateOne({ name: req.user.name }, { $pull: { following: [removedFollower] } });
+        let followee = await User.updateOne({ name: user[0].name }, { $pull: { followers: [req.user.id] } });
+        if (follower.modifiedCount === 1 && followee.modifiedCount === 1){
+            res.status(200).json({msg: 'User UnFollowed Successfully'});
+        }
+
+        else {
+            res.status(401).json({ msg: 'You can not unfollow a user that you do not follow' });
+        }
+    }
+    else{
+        res.status(500).json({msg: 'You can not unfollow a user that does not exist'});
+    }
+
+    /* User.findOne({
         name: username
     }, function (err, users) {
         if (err)
@@ -176,7 +185,7 @@ router.post("/user/unfollow/", ensureAuthenticated, function (req, res) {
         }
 
         res.sendStatus(200);
-    });
+    }); */
 
 });
 
