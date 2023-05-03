@@ -212,23 +212,20 @@ router.get("/user/:username", async function (req, res) {
     }
 });
 
-router.get("/isFollowing/:username", function (req, res) {
-    if (req.user) {
-        User.findOne({
-            name: req.params.username
-        }, function (err, users) {
-            if (err)
-                return console.error(err);
-            if (users) {
-                if (req.user.following.includes(users.id)) {
-                    res.json({ isFollowing: true });
-                } else {
-                    res.json({ isFollowing: false });
-                }
-            }
-        });
-    } else {
-        res.json({});
+router.get("/isFollowing/:username",ensureAuthenticated ,async function (req, res) {
+    let followedUser = await User.find({ name: req.params.username });
+
+    if (followedUser[0]){
+        if (req.user.following.includes(followedUser[0].id)) {
+            res.json({ isFollowing: true });
+        } else {
+            res.json({ isFollowing: false });
+        }
     }
+
+    else {
+        res.status(404).json({msg: 'followed user could not be found'});
+    }
+    
 });
 module.exports = router;
