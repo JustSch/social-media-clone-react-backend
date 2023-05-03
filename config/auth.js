@@ -3,7 +3,6 @@ module.exports = {
         if(req.isAuthenticated()) {
             return next();
         }
-        req.flash('error_msg', 'Please Login to This Resource');
-        res.redirect('/users/login');
+        res.status(403).send('You Are Not Authorized To Access This Resource');
     }
 }
