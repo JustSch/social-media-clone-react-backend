@@ -216,7 +216,10 @@ router.get("/isFollowing/:username",ensureAuthenticated ,async function (req, re
     let followedUser = await User.find({ name: req.params.username });
 
     if (followedUser[0]){
-        if (req.user.following.includes(followedUser[0].id)) {
+        if (req.user.name === followedUser[0].name) {
+            res.json({ isFollowing: 'own'});
+        }
+        else if (req.user.following.includes(followedUser[0].id)) {
             res.json({ isFollowing: true });
         } else {
             res.json({ isFollowing: false });
