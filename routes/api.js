@@ -119,8 +119,8 @@ router.post("/user/follow/", ensureAuthenticated,async function (req, res) {
 
     if (user[0]) {
         newFollower = user[0].id;
-        let follower = await User.updateOne({ name: req.user.name }, { $addToSet: { following: [newFollower] }});
-        let followee = await User.updateOne({ name: user[0].name }, { $addToSet: { followers: [req.user.id] }});
+        let follower = await User.updateOne({ name: req.user.name }, { $addToSet: { following: { $each: [newFollower]} }});
+        let followee = await User.updateOne({ name: user[0].name }, { $addToSet: { followers: { $each:  [req.user.id]} }});
         
         if (follower.modifiedCount === 1 && followee.modifiedCount === 1){
             res.status(200).json({msg: 'User Followed Successfully'});
@@ -144,8 +144,8 @@ router.post("/user/unfollow/", ensureAuthenticated,async function (req, res) {
     const user = await User.find({ name: username });
     if (user[0]) {
         let removedFollower = user[0].id;
-        let follower = await User.updateOne({ name: req.user.name }, { $pull: { following: [removedFollower] } });
-        let followee = await User.updateOne({ name: user[0].name }, { $pull: { followers: [req.user.id] } });
+        let follower = await User.updateOne({ name: req.user.name }, { $pullAll: { following: [removedFollower] } });
+        let followee = await User.updateOne({ name: user[0].name }, { $pullAll: { followers: [req.user.id] } });
         if (follower.modifiedCount === 1 && followee.modifiedCount === 1){
             res.status(200).json({msg: 'User UnFollowed Successfully'});
         }
