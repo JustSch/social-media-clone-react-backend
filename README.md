@@ -26,3 +26,13 @@ npm run build
 ```bash
 npm run start
 ```
+
+### Note:
+
+Add your MongoDB URI in /config/keys.js with the format:
+
+```bash
+module.exports = {
+    MongoURI: 'MONGODBURI'
+}
+```
